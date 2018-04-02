@@ -27,30 +27,37 @@ class Cell {
         ctx.strokeStyle = '#111';
         //ctx.strokeRect(this.cols * cellSize[0], this.rows * cellSize[1], cellSize[0], cellSize[1]);
 
-        ctx.beginPath();
-
         if(this.walls[3]) {
+            ctx.beginPath();
             ctx.moveTo(this.cols * cellSize[0], this.rows * cellSize[1]);
             ctx.lineTo(this.cols * cellSize[0], this.rows * cellSize[1] + cellSize[1]);
+            ctx.stroke();
         }
         if(this.walls[0]) {
+            ctx.beginPath();
             ctx.moveTo(this.cols * cellSize[0], this.rows * cellSize[1]);
             ctx.lineTo(this.cols * cellSize[0] + cellSize[0], this.rows * cellSize[1]);
+            ctx.stroke();
         }
         if(this.walls[1]) {
+            ctx.beginPath();
             ctx.moveTo(this.cols * cellSize[0] + cellSize[0], this.rows * cellSize[1]);
             ctx.lineTo(this.cols * cellSize[0] + cellSize[0], this.rows * cellSize[1] + cellSize[1]);
+            ctx.stroke();
         } if(this.walls[2]) {
+            ctx.beginPath();
             ctx.moveTo(this.cols * cellSize[0], this.rows * cellSize[1] + cellSize[1]);
-            ctx.lineTo(this.cols * cellSize[0], this.rows * cellSize[1] + cellSize[1]);
+            ctx.lineTo(this.cols * cellSize[0] + cellSize[0], this.rows * cellSize[1] + cellSize[1]);
+            ctx.stroke();
         }
-        ctx.stroke();
 
 
         if(current != this && !this.visited)
             ctx.fillStyle = '#29fb2f';
-        else if(this.visited)
+        else if(this.visited && this != current)
             ctx.fillStyle = '#20db10';
+        else if(this == current)
+            ctx.fillStyle = '#da70d6';
         ctx.fillRect(this.cols * cellSize[0], this.rows * cellSize[1], cellSize[0], cellSize[1]);
     }
 
@@ -117,14 +124,15 @@ function removeWalls(a, b) {
         a.walls[3] = false;
         b.walls[1] = false;
     } else if(b.rows == a.rows + 1) {
-        a.walls[0] = false;
-        b.walls[2] = false;
-    } else if(b.rows == a.rows - 1) {
         a.walls[2] = false;
         b.walls[0] = false;
+    } else if(b.rows == a.rows - 1) {
+        a.walls[0] = false;
+        b.walls[2] = false;
     }
 }
 
+let n = 0;
 function draw() {
     let done = false;
 
@@ -134,7 +142,7 @@ function draw() {
     else
         done = true;
 
-    if(!done) {
+    if(!done && n % 1 == 0) {
         if(neighbors != null) {
             const randIndex = Math.floor(Math.random() * neighbors.length);
             const neighbor = neighbors[randIndex];
@@ -152,6 +160,8 @@ function draw() {
 
     if(!done) requestAnimationFrame(draw);
     else console.log('DONE!');
+
+    n++;
 }
 
 setup();
