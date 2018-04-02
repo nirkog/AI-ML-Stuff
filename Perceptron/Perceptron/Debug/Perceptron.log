@@ -1,0 +1,6 @@
+﻿  main.cpp
+d:\data\programming\c++\perceptron\perceptron\main.cpp(17): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+d:\data\programming\c++\perceptron\perceptron\main.cpp(18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+d:\data\programming\c++\perceptron\perceptron\main.cpp(33): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Perceptron.vcxproj -> D:\DATA\Programming\C++\Perceptron\Debug\Perceptron.exe
+  Perceptron.vcxproj -> D:\DATA\Programming\C++\Perceptron\Debug\Perceptron.pdb (Partial PDB)
