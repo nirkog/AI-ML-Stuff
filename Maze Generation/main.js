@@ -132,7 +132,6 @@ function removeWalls(a, b) {
     }
 }
 
-let n = 0;
 function draw() {
     let done = false;
 
@@ -142,7 +141,7 @@ function draw() {
     else
         done = true;
 
-    if(!done && n % 1 == 0) {
+    if(!done) {
         if(neighbors != null) {
             const randIndex = Math.floor(Math.random() * neighbors.length);
             const neighbor = neighbors[randIndex];
@@ -160,8 +159,6 @@ function draw() {
 
     if(!done) requestAnimationFrame(draw);
     else console.log('DONE!');
-
-    n++;
 }
 
 setup();
