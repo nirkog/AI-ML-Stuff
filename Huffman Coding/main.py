@@ -1,4 +1,6 @@
-import operator, time
+import operator, time, heapq, math
+
+encodings = {}
 
 class Node:
     def __init__(self, sum):
@@ -10,6 +12,12 @@ class Node:
     
     def addChar(self, char):
         self.char = char
+    
+    def __lt__(self, other):
+        return self.sum < other.sum
+    
+    def __gt__(self, other):
+        return self.sum > other.sum
 
 def readFile(path):
     file = open(path, 'r')
@@ -24,12 +32,12 @@ def createTree(freq):
     for i in range(len(freq)):
         node = Node(list(freq.items())[i][1])
         node.addChar(list(freq.items())[i][0])
-        nodes.append(node)
+        heapq.heappush(nodes, node)
         originalNodes.append(node)
     
-    while not len(nodes) == 1:
-        last = nodes[len(nodes) - 1] 
-        former = nodes[len(nodes) - 2]
+    while len(nodes) > 1:
+        last = heapq.heappop(nodes)
+        former = heapq.heappop(nodes)
 
         parentNode = Node(former.sum + last.sum)
         parentNode.left = last
@@ -38,14 +46,7 @@ def createTree(freq):
         last.parent = parentNode
         former.parent = parentNode
 
-        if last in originalNodes:
-            originalNodes[len(originalNodes) - 1].parent = parentNode
-        if former in originalNodes:
-            originalNodes[len(originalNodes) - 2].parent = parentNode
-
-        nodes.insert(0, parentNode)
-
-        nodes = nodes[0:len(nodes) - 2]
+        heapq.heappush(nodes, parentNode)
 
     return (nodes[0], originalNodes)
 
@@ -63,6 +64,18 @@ def findCharInNodes(char, nodes):
             return node
     return None
 
+def getEncodings(root, currentEn):
+    if root == None:
+        return
+
+    if root.char != None:
+        encodings[root.char] = currentEn
+        return
+    
+    getEncodings(root.left, currentEn + '0')
+    getEncodings(root.right, currentEn + '1')
+
+
 def compress(path):
     frequencies = {}
     fileData = readFile(path)
@@ -76,27 +89,25 @@ def compress(path):
     frequencies = dict(sorted(frequencies.items(), key=operator.itemgetter(1), reverse=True))
     root, originalNodes = createTree(frequencies)
 
-    encodings = {}
-    
-    for char in frequencies.keys():
-        encoding = ''
-        node = findCharInNodes(char, originalNodes)
-        current = node
-        while not current == None:
-            if not current.parent == None:
-                if current == current.parent.left:
-                    encoding += '0'
-                elif current == current.parent.right:
-                    encoding += '1'
-            current = current.parent
-        encodings[char] = encoding
+    getEncodings(root, '')
 
     compression = ''
     
     for char in fileData:
         compression += encodings[char]
-    
+
+    print(compression[:100])
+
     return (frequencies, compression)
+
+def intToBin(num):
+    temp = num
+    binary = ''
+    while len(binary) < 8:
+        binary += str(temp % 2)
+        temp = math.floor(temp / 2)
+    
+    return binary[::-1]
 
 def decompress(path):
     file = open(path, 'rb')
@@ -125,7 +136,28 @@ def decompress(path):
         i += 1
     
     compressedData = data[dataStartIndex:]
-    print(bytearray.decode(compressedData.decode()))
+    binary = ''
+
+    for char in compressedData:
+        binary += intToBin(int(str(char)))
+    
+    root, originalNodes = createTree(freq)
+    getEncodings(root, '')
+
+    decompressed = ''
+
+    current = root
+    for i in binary:
+        if current.left == None and current.right == None:
+            decompressed += current.char
+            current = root
+        if i == '1':
+            current = current.right
+        elif i == '0':
+            current = current.left
+    
+    return decompressed
+    
 
 def toBinary(data):
     ret = []
@@ -159,7 +191,8 @@ def main():
 
     writeToFile('compressed.bin', start, toBinary(compression))
 
-    decompress('compressed.bin')
+    data = decompress('compressed.bin')
+    print(data)
 
 if __name__ == '__main__':
     main()
