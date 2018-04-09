@@ -73,12 +73,3 @@ def writeToFile(path, data):
     file = open(path, 'w')
     file.write(data)
     file.close()
-
-'''def main():
-    freq, compression = compress('test.txt')
-    start = getStart(freq)
-
-    writeToFile('compressed.bin', start, toBinary(compression))
-
-    data = decompress('compressed.bin')
-    print(data)'''
