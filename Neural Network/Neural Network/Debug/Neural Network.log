@@ -1,0 +1,7 @@
+﻿  main.cpp
+d:\data\programming\ai-ml-stuff\neural network\neural network\main.cpp(13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\data\programming\ai-ml-stuff\neural network\neural network\main.cpp(27): warning C4018: '<': signed/unsigned mismatch
+d:\data\programming\ai-ml-stuff\neural network\neural network\main.cpp(40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\data\programming\ai-ml-stuff\neural network\neural network\main.cpp(50): warning C4018: '<': signed/unsigned mismatch
+d:\data\programming\ai-ml-stuff\neural network\neural network\main.cpp(74): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Neural Network.vcxproj -> D:\DATA\Programming\AI-ML-Stuff\Neural Network\Debug\Neural Network.exe
