@@ -18,15 +18,15 @@ float dActivate(float x)
 NeuralNetwork::NeuralNetwork(unsigned int inputs, unsigned int hidden, unsigned int outputs)
 	: m_HiddenWeights(hidden, inputs), m_OutputWeights(outputs, hidden), m_HiddenBias(hidden, 1), m_OutputBias(outputs, 1)
 {
-	m_HiddenWeights.Randomize();
+	/*m_HiddenWeights.Randomize();
 	m_OutputWeights.Randomize();
 	m_HiddenBias.Randomize();
-	m_OutputBias.Randomize();
+	m_OutputBias.Randomize();*/
 
 	m_Inputs = inputs;
 	m_Outputs = outputs;
 
-	m_LearningRate = 0.1f;
+	m_LearningRate = 0.08f;
 }
 
 Layers NeuralNetwork::feedForward(float inputs[]) const
@@ -93,10 +93,15 @@ void NeuralNetwork::train(float inputs[], float targets[])
 
 	Matrix dCdO = (output - targetMatrix) * 2;
 	Matrix dSigOutput = Matrix::Map(zOutput, dActivate);
+	std::cout << zOutput << std::endl;
+
 	Matrix hiddenT = Matrix::Transpose(hidden);
 	Matrix deltaWO = dSigOutput.HadamardMul(dCdO) * hiddenT;
 	deltaWO *= -m_LearningRate;
 	Matrix deltaBO = dSigOutput.HadamardMul(dCdO) * -m_LearningRate;
+
+	//std::cout << "Output weights delta: " << 
+		//deltaWO << "Outpout Bias delta: " << deltaBO << std::endl;
 
 	m_OutputWeights += deltaWO;
 	m_OutputBias += deltaBO;
@@ -109,30 +114,12 @@ void NeuralNetwork::train(float inputs[], float targets[])
 	deltaWH *= -m_LearningRate;
 	Matrix deltaBH = dCdH.HadamardMul(dSigHidden) * -m_LearningRate;
 
-	/*Matrix outputErrors = targetMatrix - output;
-	Matrix gradients = Matrix::Map(zOutput, dActivate);
-	gradients = gradients.HadamardMul(outputErrors);
-	gradients *= m_LearningRate;
-
-	Matrix hiddenT = Matrix::Transpose(hidden);
-	Matrix weighODelta = gradients * hiddenT;
-
-	m_OutputWeights += weighODelta;
-	m_OutputBias += gradients;
-
-	Matrix weightsOT = Matrix::Transpose(m_OutputWeights);
-	Matrix hiddenErrors = weightsOT * outputErrors;
-
-	Matrix hiddenGradient = Matrix::Map(zHidden, dActivate);
-	hiddenGradient = hiddenGradient.HadamardMul(hiddenErrors);
-	hiddenGradient *= m_LearningRate;
-
-	Matrix inputsT = Matrix::Transpose(inputMatrix);
-	Matrix weightHDelta = hiddenGradient * inputsT;
-
-	m_HiddenWeights += weightHDelta;
-	m_HiddenBias += hiddenGradient;*/
-
 	m_HiddenWeights += deltaWH;
 	m_HiddenBias += deltaBH;
+}
+
+void NeuralNetwork::Print() const 
+{
+	std::cout << "Hidden Weights:" << std::endl << m_HiddenWeights << "Hidden Bias:" << m_HiddenBias;
+	std::cout << "Output Weights:" << std::endl << m_OutputWeights << "Output Bias:" << m_OutputBias;
 }

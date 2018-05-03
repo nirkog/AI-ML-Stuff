@@ -12,6 +12,9 @@ int main()
 {
 	srand(time(NULL));
 
+	Matrix m(1, 6);
+	Matrix::Transpose(m);
+
 	NeuralNetwork brain(3, 3, 1);
 
 	std::string line;
@@ -43,8 +46,21 @@ int main()
 		file.close();
 	}
 
+	std::cout << data[1][1];
 
-	int trainingMul = 100;
+	std::cout << "Initial Net:" << std::endl;
+	brain.Print();
+	std::cout << "----------" << std::endl;
+
+	float inputs[3] = { data[1][0], data[1][1], data[1][2] };
+	float targets[1] = { data[1][3] };
+	for(int i = 0; i < 100; i++) brain.train(inputs, targets);
+
+	std::cout << "Trained Net:" << std::endl;
+	brain.Print();
+
+
+	/*int trainingMul = 100;
 	for (int i = 0; i < trainingMul; i++)
 	{
 		for (int j = 0; j < data.size(); j++)
@@ -76,7 +92,7 @@ int main()
 		outputFile << round(inputs[0] * 255) << ", " << round(inputs[1] * 255) << ", " << round(inputs[2] * 255) << ", " << guess << std::endl;
 	}
 
-	std::cout << "Wrote predictions to file " << fileName << std::endl;
+	brain.Print();*/
 
 	std::cin.get();
 

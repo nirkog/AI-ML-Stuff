@@ -176,11 +176,12 @@ class Matrix {
     }
 
     static Map(m, func) {
-        m.data = m.data.map(
+        let ret = new Matrix(m.rows, m.columns);
+        ret.data = m.data.map(
             (row, i) => row.map((val, j) => func(val, i, j))
         );
 
-        return m;
+        return ret;
     }
 
     Transpose() {
@@ -234,7 +235,7 @@ class NeuralNetwork {
         this.hiddenBias.Randomize();
         this.outputBias.Randomize();
 
-        this.learningRate = 0.1;
+        this.learningRate = 0.08;
 
         this.dActivate = this.dActivate.bind(this);
     }
@@ -252,7 +253,7 @@ class NeuralNetwork {
         inputs.Transpose();
             
         let hiddenZ = Matrix.Multiply(this.hiddenWeights, inputs).Add(this.hiddenBias);
-        let hidden = Matrix.Map(hiddenZ, this.activate);
+        let hidden = Matrix.Map(hiddenZ, (val, i, j) => 1 / (1 + Math.exp(-val)));
 
         let outputZ = Matrix.Multiply(this.outputWeights, hidden).Add(this.outputBias);
         let output = Matrix.Map(outputZ, this.activate);
@@ -265,7 +266,7 @@ class NeuralNetwork {
 
     train(inputs, targets) {
         let data = this.guess(inputs, true);
-        targets = Matrix.fromArray([targets]).Transpose();
+        targets = new Matrix([targets]).Transpose();
         inputs = data.inputs;
         let hiddenZ = data.hiddenZ;
         let hidden = data.hidden;

@@ -127,8 +127,6 @@ void Matrix::Print() const
 
 void Matrix::Randomize()
 {
-	srand(time(NULL));
-
 	for (unsigned int i = 0; i < m_Rows; i++)
 	{
 		for (unsigned int j = 0; j < m_Columns; j++)

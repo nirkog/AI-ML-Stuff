@@ -1,4 +1,4 @@
-.container {
+/* .container {
     display: flex;
 }
 .container div {
@@ -13,6 +13,15 @@
 .left {
     color: white;
     border-right: 1px solid #111;
+} */
+.main {
+    width: 100%;
+    padding-top: 250px;
+    padding-bottom: 250px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    font-size: 5rem;
 }
 #guess {
     font-size: 4rem;

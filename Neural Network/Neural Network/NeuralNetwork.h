@@ -23,6 +23,8 @@ public:
 	void train(float inputs[], float targets[]);
 
 	void setLearningRate(float lr) { m_LearningRate = lr; }
+
+	void Print() const;
 private:
 	Layers feedForward(float inputs[]) const;
 private:
